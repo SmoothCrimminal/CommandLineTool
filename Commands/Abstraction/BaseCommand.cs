@@ -1,4 +1,4 @@
-﻿namespace CommandLineTool.Commands
+﻿namespace CommandLineTool.Commands.Abstraction
 {
     public abstract class BaseCommand
     {

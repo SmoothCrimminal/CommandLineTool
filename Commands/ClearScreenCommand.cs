@@ -1,4 +1,6 @@
-﻿namespace CommandLineTool.Commands
+﻿using CommandLineTool.Commands.Abstraction;
+
+namespace CommandLineTool.Commands
 {
     public class ClearScreenCommand : ICommand
     {
