@@ -3,9 +3,11 @@ using System.Text;
 
 namespace CommandLineTool.Commands
 {
-    public static class ListSubdirectoriesCommand
+    public class ListSubdirectoriesCommand : ICommand
     {
-        public static string Execute()
+        public string Name => "ls";
+
+        public void Execute(string[] args)
         {
             var sb = new StringBuilder();
             var files = Directory.GetFiles(DirectoryTracker.CurrentFolder);
@@ -18,7 +20,7 @@ namespace CommandLineTool.Commands
             foreach (var file in allFiles)
                 sb.AppendLine(file.Split('\\', StringSplitOptions.RemoveEmptyEntries)[^1]);
 
-            return sb.ToString();
+            Console.Write(sb.ToString());
         }
     }
 }

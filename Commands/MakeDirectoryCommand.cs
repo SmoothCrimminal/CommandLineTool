@@ -2,15 +2,16 @@
 
 namespace CommandLineTool.Commands
 {
-    public static class MakeDirectoryCommand
+    public class MakeDirectoryCommand : BaseCommand, ICommand
     {
-        public static void Execute(string input)
+        public string Name => "mkdir";
+
+        public void Execute(string[] args)
         {
-            var parsedInput = ParseInput(input);
-            if (!ValidateInput(parsedInput))
+            if (!ValidateInput(args))
                 return;
 
-            var combinedArgs = string.Join(' ', parsedInput[1..]);
+            var combinedArgs = string.Join(' ', args);
 
             try
             {
@@ -22,34 +23,20 @@ namespace CommandLineTool.Commands
             }
         }
 
-        private static bool ValidateInput(string[] args)
+        protected override bool ValidateInput(string[] args, Func<bool>? additionalValidation = null)
         {
-            if (args.Length < 2)
-                return ConsoleError("Input was too short");
+            return base.ValidateInput(args, () =>
+            {
+                var combiedArgs = string.Join(' ', args);
 
-            if (args[0] != "mkdir")
-                return ConsoleError("Command was not recognized!");
+                if (string.IsNullOrWhiteSpace(combiedArgs))
+                    return ConsoleError("Cannot create folder with empty name!");
 
-            var combiedArgs = string.Join(' ', args[1..]);
+                if (Path.HasExtension(combiedArgs))
+                    return ConsoleError("mkdir command is used for creating folders only");
 
-            if (string.IsNullOrWhiteSpace(combiedArgs))
-                return ConsoleError("Cannot create folder with empty name!");
-
-            if (Path.HasExtension(combiedArgs))
-                return ConsoleError("mkdir command is used for creating folders only");
-
-            return true;
-        }
-
-        private static string[] ParseInput(string input)
-        {
-            return input.Split(' ');
-        }
-
-        private static bool ConsoleError(string error)
-        {
-            Console.WriteLine(error);
-            return false;
+                return true;
+            });
         }
     }
 }
